@@ -12,5 +12,11 @@ public record DatosEspecificos(
         @JsonAlias("authors") List<DatosAutor> autor,
         @JsonAlias("languages") List<String> idiomas,
         @JsonAlias("download_count") Double totalDescargas) {
-
+    @Override
+    public String toString() {
+        return  "titulo='" + titulo + '\'' +
+                ", autor=" + autor +'\'' +
+                ", idiomas=" + idiomas +'\'' +
+                ", totalDescargas=" + totalDescargas;
+    }
 }

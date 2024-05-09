@@ -17,16 +17,37 @@ public class BuscalibrosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//Scanner teclado = new Scanner(System.in);
+		Scanner teclado = new Scanner(System.in);
 		Principal principal = new Principal();
+		var opcion =0;
+		while (opcion !=9) {
 
-		principal.muetsraMenu();
-		principal.buscarLibro();
+			principal.opcionesMenu();
+			opcion = teclado.nextInt();
+			switch (opcion){
 
+				case 1:
+					principal.muetsraMenu(5);
+					break;
 
+				case 2:
+					principal.muetsraMenu(10);
 
+					break;
 
+				case 3:
+					principal.buscarLibro();
+					break;
+
+				case 9:
+					System.out.println("Proceso terminado");
+					System.out.println("Gracias por usar nuestros servicios");
+					break;
+
+				default:
+					System.out.println("Opcion no valida");
+			}
+		}
 
 	}
-
 }

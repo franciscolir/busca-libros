@@ -8,4 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public record DatosAutor(
         @JsonAlias("name") String nombre,
         @JsonAlias("birth_year") String fechaNacimineto){
+    @Override
+    public String toString() {
+        return  "nombre='" + nombre + '\'' +
+                "fechaNacimineto='" + fechaNacimineto;
+    }
 }
