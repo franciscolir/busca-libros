@@ -19,6 +19,7 @@ public class ConsumoApi {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
+            System.out.println("No encontrado");
             throw new RuntimeException(e);
         }
 

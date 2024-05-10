@@ -7,7 +7,10 @@ import com.aluracursos.buscalibros.buscalibros.servicios.ConsumoApi;
 import com.aluracursos.buscalibros.buscalibros.servicios.ConvierteDatos;
 
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import java.util.zip.CheckedOutputStream;
 
 public class Principal {
@@ -34,24 +37,40 @@ public class Principal {
     }
     public void buscarLibro() {
 
-        System.out.println("Ingrese apellido escritor");
-        System.out.println("Si no lo sabe presione enter.");
-
-        var escritor = teclado.nextLine();
 
         System.out.println("Ingrese nombre del libro");
 
-        var nombreLibro = teclado.nextLine();
+        var buscaLibro = teclado.nextLine();
 
-        var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + escritor + "%20" + nombreLibro);
+        var json = consumoApi.obtenerDatos(URL_BASE + "?search=" + buscaLibro.replace(" ", "+"));
 
         var buscador = convierteDatos.obtenerDatos(json, DatosGenerales.class);
-        System.out.println("Libros encontrados");
-        buscador.resultado().stream()
-                .limit(10)
-                .forEach(System.out::println);
 
+        Optional<DatosEspecificos> libroBuscado = buscador.resultado().stream()
+                        .filter(l -> l.titulo().toUpperCase().contains(buscaLibro.toUpperCase()))
+                        .findFirst();
+          if (libroBuscado.isPresent()){
+              System.out.println("Libro encontrado");
+              System.out.println(libroBuscado.get());
+          } else {
+              System.out.println("Libro no encontrado");
+          }
 
+ }
+ public void estadisticas (){
+     var json = consumoApi.obtenerDatos(URL_BASE);
+     //System.out.println(json);
+
+     var datos = convierteDatos.obtenerDatos(json, DatosGenerales.class);
+
+        DoubleSummaryStatistics est = datos.resultado().stream()
+                .filter(d -> d.totalDescargas()>0)
+                .collect(Collectors.summarizingDouble(DatosEspecificos::totalDescargas));
+
+     System.out.println("Promedio de descargas: "+est.getAverage());
+     System.out.println("Libro con mas descargas: "+est.getMax());
+     System.out.println("Libro con menos descargas: "+est.getMin());
+     System.out.println("Total de libros analizados: "+est.getCount());
  }
 
  public void opcionesMenu (){
@@ -62,6 +81,7 @@ public class Principal {
              1- Mostar TOP 5 libros mas descargados
              2- Mostar TOP 10 libros mas descargados
              3- Buscar por autor y/o nombre del libro
+             4- Estadisticas
              9. Salir
              """);
      System.out.println("***********");

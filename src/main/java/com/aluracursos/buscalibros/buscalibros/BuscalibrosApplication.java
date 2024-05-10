@@ -23,6 +23,10 @@ public class BuscalibrosApplication implements CommandLineRunner {
 		while (opcion !=9) {
 
 			principal.opcionesMenu();
+			while (!teclado.hasNextInt()) {
+				System.out.println("Por favor, introduce solo números:");
+				teclado.next();
+			}
 			opcion = teclado.nextInt();
 			switch (opcion){
 
@@ -32,11 +36,14 @@ public class BuscalibrosApplication implements CommandLineRunner {
 
 				case 2:
 					principal.muetsraMenu(10);
-
 					break;
 
 				case 3:
 					principal.buscarLibro();
+					break;
+
+				case 4:
+					principal.estadisticas();
 					break;
 
 				case 9:
